@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Movie Listings</title>
+  {% load static %}
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px 40px;
+      margin: 0;
+    }
+
+    h1 {
+      text-align: left;
+      margin-bottom: 10px;
+    }
+
+    #search {
+      padding: 8px 10px;
+      width: 250px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    h2 {
+      margin-top: 30px;
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .movie-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start; /* Rata kiri */
+      gap: 60px;
+    }
+
+    .movie-item {
+      width: 180px;
+      text-align: left; /* Rata kiri konten */
+    }
+
+    .movie-item img {
+      width: 220px;
+      height: 326px;
+      object-fit: cover;
+      object-position: center;
+      border-radius: 6px;
+    }
+
+    
+
+    .movie-item h3 {
+      font-size: 16px;
+      margin: 10px 0 5px;
+    }
+
+    .movie-item p {
+      font-size: 14px;
+      margin: 2px 0;
+    }
+
+    .poster-container {
+      width: 220px;
+      height: 326px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0; /* Optional: latar belakang */
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .poster-container img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+  </style>
+
+  <script>
+    function searchMovies() {
+      let input = document.getElementById('search').value.toLowerCase();
+      let movieItems = document.getElementsByClassName('movie-item');
+      for (let item of movieItems) {
+        let title = item.getElementsByTagName('h3')[0].textContent.toLowerCase();
+        item.style.display = title.includes(input) ? '' : 'none';
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <h1>Movie Listings @ GV Cinema</h1>
+  <input type="text" id="search" onkeyup="searchMovies()" placeholder="Search movies..." />
+
+  <h2>Popular Movies this month</h2>
+  
+  <div class="movie-grid">
+    {% for movie in movies %}
+    <div class="movie-item">
+      <div class="poster-container">
+        <img src="{% static movie.img_path|cut:'assets/' %}" alt="{{ movie.name }}">
+      </div>
+    
+      <h3><a href="{% url 'movie_detail' movie.id %}">{{ movie.name }}</a></h3>
+      <p>{{ movie.duration }} min</p>
+      <p>User Rating: {{ movie.user_rating }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+</body>
+</html>
